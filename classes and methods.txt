@@ -1,0 +1,221 @@
+class Variable: 
+    def add_domain_values(self, values):
+        '''
+        Add additional domain values to the domain Removals not supported 
+        removals.
+        '''
+
+
+    def domain_size(self):
+        '''Return the size of the (permanent) domain'''
+
+
+    def domain(self):
+        '''Return the variable's (permanent) domain'''
+
+    # Methods for current domain (pruning and unpruning)
+    def prune_value(self, value):
+        '''Remove value from CURRENT domain'''
+
+
+    def unprune_value(self, value):
+        '''Restore value to CURRENT domain'''
+
+
+    def cur_domain(self):
+        '''
+        Return list of values in CURRENT domain (if assigned only assigned value 
+        is viewed as being in current domain).
+        '''
+
+    def in_cur_domain(self, value):
+        '''
+        Check if value is in CURRENT domain (without constructing list) if 
+        assigned only assigned value is viewed as being in current domain
+        '''
+
+    def cur_domain_size(self):
+        '''
+        Return the size of the variables domain (without constructing list)
+        '''
+
+    def restore_curdom(self):
+        '''Return all values back into CURRENT domain'''
+
+    #methods for assigning and unassigning
+    def is_assigned(self):
+        return self.assignedValue != None
+    
+    def assign(self, value):
+        '''
+        Used by bt_search. When we assign we remove all other values from 
+        current domain. We save this information so that we can reverse it on 
+        unassign.
+        '''
+
+
+    def unassign(self):
+        '''Used by bt_search. Unassign and restore old curdom'''
+
+
+    def get_assigned_value(self):
+        '''return assigned value...returns None if is unassigned'''
+
+
+
+
+    def print_all(self):
+        '''Also print the variable domain and current domain'''
+
+
+class Constraint: 
+
+    def add_satisfying_tuples(self, tuples):
+        '''
+        We specify the constraint by adding its complete list of satisfying 
+        tuples.
+        '''
+
+    def get_scope(self):
+        '''Get the list of variables that the constraint is over'''
+
+    def check(self, vals):
+        '''
+        Given list of values, one for each variable in the constraints scope, 
+        return true if and only if these value assignments satisfy the 
+        constraint by applying the constraints "satisfies" function.  Note the 
+        list of values are must be ordered in the same order as the list of 
+        variables in the constraints scope.
+        '''
+
+    def get_n_unasgn(self):
+        '''
+        Return the number of unassigned variables in the constraint's scope.
+        '''
+
+    def get_unasgn_vars(self): 
+        '''
+        Return list of unassigned variables in constraint's scope. 
+        NOTE: more expensive to get the list than to then number.
+        '''
+
+    def has_support(self, var, val):
+        '''
+        Test if a variable value pair has a supporting tuple (a set of 
+        assignments satisfying the constraint where each value is still in the 
+        corresponding variables current domain.
+        '''
+
+    def tuple_is_valid(self, t):
+        '''
+        Internal routine. Check if every value in tuple is still in 
+        corresponding variable domains.
+        '''
+
+
+class CSP:
+    def add_var(self,v):
+        '''
+        Add variable object to CSP while setting up an index to obtain the 
+        constraints over this variable.
+        '''
+
+    def add_constraint(self,c):
+        '''
+        Add constraint to CSP. Note that all variables in the constraints scope 
+        must already have been added to the CSP.
+        '''
+
+    def get_all_cons(self):
+        '''
+        Return list of all constraints in the CSP.
+        '''
+        
+    def get_cons_with_var(self, var):
+        '''
+        Return list of constraints that include var in their scope.
+        '''
+
+    def get_all_vars(self):
+        '''
+        Return list of variables in the CSP.
+        '''
+
+    def get_all_unasgn_vars(self):
+        '''
+        Return list of unassigned variables in the CSP.
+        '''
+
+    def print_all(self):
+
+    def print_soln(self):
+
+
+class BT:
+    def trace_on(self):
+        '''Turn search trace on'''
+
+    def trace_off(self):
+        '''Turn search trace off'''
+
+    def quiet(self):
+        
+    def clear_stats(self):
+        '''Initialize counters'''
+
+    def print_stats(self):
+
+    def restoreValues(self,prunings):
+        '''
+        Restore list of values to variable domains each item in prunings is a 
+        pair (var, val).
+        '''
+
+    def restore_all_variable_domains(self):
+        '''Reinitialize all variable domains'''
+
+    def restoreUnasgnVar(self, var):
+        '''Add variable back to list of unassigned vars'''
+        
+    def bt_search(self,propagator,var_ord=None,val_ord=None):
+        '''Try to solve the CSP using specified propagator routine
+
+           propagator == a function with the following template
+           propagator(csp, newly_instantiated_variable=None)
+           ==> returns (True/False, [(Variable, Value), (Variable, Value) ...]
+
+           csp is a CSP object---the propagator can use this to get access
+           to the variables and constraints of the problem.
+
+           newly_instaniated_variable is an optional argument. 
+           if newly_instantiated_variable is not None:
+               then newly_instantiated_variable is the most
+               recently assigned variable of the search.
+           else:
+               progator is called before any assignments are made
+               in which case it must decide what processing to do
+               prior to any variables being assigned.
+
+           The propagator returns True/False and a list of (Variable, Value) pairs.
+           Return is False if a deadend has been detected by the propagator.
+             in this case bt_search will backtrack
+           return is true if we can continue.
+
+           The list of variable values pairs are all of the values
+           the propagator pruned (using the variable's prune_value method). 
+           bt_search NEEDS to know this in order to correctly restore these 
+           values when it undoes a variable assignment.
+
+           NOTE propagator SHOULD NOT prune a value that has already been 
+           pruned! Nor should it prune a value twice
+
+           var_ord is the variable ordering function currently being used; 
+           val_ord is the value ordering function currently being used.
+           '''
+
+    def bt_recurse(self, propagator, var_ord, val_ord, level):
+        '''Return true if found solution. False if still need to search.
+           If top level returns false--> no solution'''
+
+		   
+		   C:/Users/Shahin/Documents/School/Skule/Year 3 - Robo/second semester/csc384/Assignment 2
